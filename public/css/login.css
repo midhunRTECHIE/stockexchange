@@ -1,0 +1,16 @@
+.login-txt{
+    margin-top:4%;
+    font-size: 12px;;
+}
+.login-bar{
+    margin-top: 10%;
+}
+.frm-block{
+    background: -webkit-linear-gradient(left, #8b6cc4, #792fee);
+}
+.frm-block-text{
+    padding-top: 20%;
+    padding-bottom: 5%;
+    margin-bottom: 20%;
+
+}
