@@ -32,4 +32,6 @@ Route::post('/userLogin', 'StockDataController@userLogin');
 
 Route::post('/userSignin', 'StockDataController@userSignin');
 
+//Route::get('/stockList', 'StockDataController@showAllComapniesName');
+
 Route::get('/stockList/action', 'StockDataController@viewStockData')->name('stockList.action');

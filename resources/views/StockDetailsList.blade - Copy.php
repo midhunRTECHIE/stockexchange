@@ -14,9 +14,11 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
     <!-- <link href="{{asset('asset/css/style.css')}}" rel="stylesheet" type="text/css"/> -->
     <link href="{{secure_asset('css/style.css')}}" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /></head>
+    
+</head>
 
 <body>
     <div class="container list-form">
@@ -32,11 +34,13 @@
                     <form class="search-form">
                         <div class="form-group has-feedback">
                             <label for="search" class="sr-only">Search</label>
-                            <!-- <input type="text" class="form-control" name="search" id="searchCompany"
-                                placeholder="Search by company name or symbol">
-                            <span class="glyphicon glyphicon-search form-control-feedback"></span> -->
-                            <select name="companyName" id="searchCompany" class="form-control searchCompany">
+                            <select class="form-control searchCompany" name="search" id="searchCompany" display:none>
+                            <option value=""></option>
+                            @foreach($list as $row)
+                            <option value="{{$row->companyName}}">{{$row->companyName}}</option>
+                            @endforeach
                             </select>
+                            <!-- <span class="glyphicon glyphicon-search form-control-feedback"></span> -->
                         </div>
                     </form>
                 </div>
@@ -48,48 +52,35 @@
         <div id="table_List_Data"></div>
     </section>
 </body>
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 </html>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
 <script language="javascript" type="text/javascript">
-$(document).ready(function() {
-    select_search_data();
 
-    function select_search_data(data = '') {
+$(document).ready(function() {
+        $('.searchCompany').select2();
+});
+$(document).ready(function(){
+    select_search_data();
+    function select_search_data(data = ''){
         var postData = {
             data: data
-        };
+	    };
         $.ajax({
             url: "{{ route('stockList.action') }}",
             type: 'get',
-            dataType: 'json',
+			dataType: 'json',
             data: postData,
-            success: function(reply) {
-                    console.log(reply.select.data);
-                    $('#table_List_Data').html(reply.table.listData);
-                    if (reply.select.data) {
-                        var list = $("#searchCompany");
-                        list.find('option').remove().end();
-                        $("#searchCompany").append('<option value="">Select</option>');
-                        for (var i in reply.select.data) {
-                            $("#searchCompany").append('<option value="' + reply.select.data[i].companyName + '">' + reply.select.data[i].companyName + '</option>');
-                        }
-
-                    }
+            success:function(reply){
+                $('#table_List_Data').html(reply.listData);
             }
-
+            
         });
     }
-    $("#searchCompany").on('change', function() {
-        //$document.on('click', '#searchCompany', function(){
+    $("#searchCompany").on('change',function(){
+    //$document.on('click', '#searchCompany', function(){
         var data = $(this).val();
         select_search_data(data);
 
     });
-    
-});
-$(document).ready(function() {
-    $('.searchCompany').select2();
 });
 </script>

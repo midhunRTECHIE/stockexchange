@@ -41,7 +41,8 @@ class StockDataController extends Controller
         return redirect()->back()->with('message', 'stock details has been added successfully!');   
      }
      public function viewStockData(Request $request) {
-
+        $data=DB::table('companystockdetails')->orderBy('companyStockDetailId', 'desc')->get();
+        $dataFull = $data;
         if($request->ajax()){
             $query = $request->get('data');
             if($query != ''){
@@ -53,8 +54,9 @@ class StockDataController extends Controller
             }
             //print_r($data); exit;
             $total_row = $data->count();
+            $result = '';
             if($total_row > 0){
-                $result = '';
+                
                 foreach ($data as $row){
                     $result .= '<div class="row list-full-con">
                     <div class="col-md-1"> </div>
@@ -114,8 +116,17 @@ class StockDataController extends Controller
                 $listData = array(
                     'listData' => $result
                 );
-                echo json_encode($listData);
+                $data = array(
+                    'data' => $dataFull
+                );
+                $list = array();
+                $list['select'] = $data;
+                $list['table'] = $listData;
+                //print_r($list);
+                echo json_encode($list);
+                
         }
+        
     }
 
     public function userLogin(Request $request) {
@@ -145,4 +156,15 @@ class StockDataController extends Controller
         return redirect('userLogin')->with('message', 'created an account successfully!');   
      
     }
+   /* public function showAllComapniesName(Request $request) {
+        $data = DB::table('companystockdetails')->orderBy('companyStockDetailId')
+                                                ->limit(5)
+                                                ->get();
+        $dataCount = $data->count();
+        if($dataCount>0){
+            return view('StockDetailsList', ['list' => $data]);
+        }else{
+            $data = array();
+            return view('StockDetailsList', ['list' => $data]);        }
+    }*/
 }
